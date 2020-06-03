@@ -25,10 +25,6 @@ class Dishdetail extends React.Component {
         };
     }
 
-    static navigationOptions = {
-        title: "Dish Details",
-    };
-
     render() {
         const dishId = this.props.navigation.getParam("dishId", "");
         return <RenderDish dish={this.state.dishes[+dishId]} />;

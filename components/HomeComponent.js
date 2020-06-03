@@ -25,9 +25,6 @@ class Home extends React.Component {
             leaders: LEADERS,
         };
     }
-    static navigationOptions = {
-        title: "Home",
-    };
 
     render() {
         return (

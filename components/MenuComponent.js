@@ -1,5 +1,5 @@
 import React from "react";
-import { View, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import { ListItem } from "react-native-elements";
 import { DISHES } from "../shared/dishes";
 
@@ -11,10 +11,6 @@ class Menu extends React.Component {
         };
     }
 
-    static navigationOptions = {
-        title: "Menu",
-    };
-
     render() {
         const { navigate } = this.props.navigation;
         const renderMenuItem = ({ item, index }) => {
@@ -23,7 +19,6 @@ class Menu extends React.Component {
                     key={index}
                     title={item.name}
                     subtitle={item.description}
-                    hideChevron={true}
                     onPress={() => navigate("Dishdetail", { dishId: item.id })}
                     leftAvatar={{ source: require("./images/uthappizza.png") }}
                 />
