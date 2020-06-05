@@ -2,10 +2,6 @@ import React from "react";
 import { Card, Text } from "react-native-elements";
 
 class Contact extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <Card title="Contact Information" titleStyle={{ fontSize: 20 }}>

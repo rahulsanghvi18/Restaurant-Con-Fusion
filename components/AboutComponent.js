@@ -1,16 +1,16 @@
 import React from "react";
 import { Card, Text, ListItem } from "react-native-elements";
 import { FlatList } from "react-native";
-import { LEADERS } from "../shared/leaders";
+import { connect } from "react-redux";
+import { baseUrl } from "../shared/baseUrl";
+
+const MapStateToProps = (state) => {
+    return {
+        leaders: state.leaders,
+    };
+};
 
 class About extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            leaders: LEADERS,
-        };
-    }
-
     history() {
         return (
             <Card title="Our History">
@@ -29,17 +29,17 @@ class About extends React.Component {
 
     render() {
         const renderMenuItem = ({ item, index }) => {
-            return <ListItem key={index} title={item.name} subtitle={item.description} leftAvatar={{ source: require("./images/alberto.png") }} />;
+            return <ListItem key={index} title={item.name} subtitle={item.description} leftAvatar={{ source: { uri: baseUrl + item.image } }} />;
         };
 
         return (
             <>
                 {this.history()}
                 <Card title="Corporate Leadership" />
-                <FlatList data={this.state.leaders} renderItem={renderMenuItem} keyExtractor={(item) => item.id.toString()} />
+                <FlatList data={this.props.leaders.leaders} renderItem={renderMenuItem} keyExtractor={(item) => item.id.toString()} />
             </>
         );
     }
 }
 
-export default About;
+export default connect(MapStateToProps)(About);
