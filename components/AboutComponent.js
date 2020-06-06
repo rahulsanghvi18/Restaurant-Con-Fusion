@@ -1,8 +1,9 @@
 import React from "react";
-import { Card, Text, ListItem } from "react-native-elements";
+import { Card, ListItem, Text } from "react-native-elements";
 import { FlatList } from "react-native";
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
+import { Loading } from "./LoadingComponent";
 
 const MapStateToProps = (state) => {
     return {
@@ -36,7 +37,13 @@ class About extends React.Component {
             <>
                 {this.history()}
                 <Card title="Corporate Leadership" />
-                <FlatList data={this.props.leaders.leaders} renderItem={renderMenuItem} keyExtractor={(item) => item.id.toString()} />
+                {(() => {
+                    if (this.props.leaders.isLoading) {
+                        return <Loading />;
+                    } else {
+                        return <FlatList data={this.props.leaders.leaders} renderItem={renderMenuItem} keyExtractor={(item) => item.id.toString()} />;
+                    }
+                })()}
             </>
         );
     }

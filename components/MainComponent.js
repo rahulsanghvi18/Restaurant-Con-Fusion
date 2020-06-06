@@ -29,7 +29,7 @@ const mapDispatchToProps = (dispatch) => ({
 const MenuNavigator = createStackNavigator(
     {
         Menu: {
-            screen: Menu,
+            screen: () => <Menu />,
             navigationOptions: ({ navigation }) => {
                 const data = {
                     title: "Menu",
@@ -38,7 +38,7 @@ const MenuNavigator = createStackNavigator(
                 return data;
             },
         },
-        Dishdetail: { screen: Dishdetail, navigationOptions: { title: "Dish Details" } },
+        Dishdetail: { screen: () => <Dishdetail />, navigationOptions: { title: "Dish Details" } },
     },
     {
         initialRouteName: "Menu",
@@ -57,7 +57,7 @@ const MenuNavigator = createStackNavigator(
 const HomeNavigator = createStackNavigator(
     {
         Home: {
-            screen: Home,
+            screen: () => <Home />,
             navigationOptions: ({ navigation }) => {
                 const data = {
                     title: "Home",
@@ -83,7 +83,7 @@ const HomeNavigator = createStackNavigator(
 const AboutNavigator = createStackNavigator(
     {
         About: {
-            screen: About,
+            screen: () => <About />,
             navigationOptions: ({ navigation }) => {
                 const data = {
                     title: "About",
@@ -109,7 +109,7 @@ const AboutNavigator = createStackNavigator(
 const ContactNavigator = createStackNavigator(
     {
         Contact: {
-            screen: Contact,
+            screen: () => <Contact />,
             navigationOptions: ({ navigation }) => {
                 const data = {
                     title: "Contact",
@@ -202,7 +202,7 @@ const MainNavigator = createDrawerNavigator(
 class Main extends Component {
     componentDidMount() {
         this.props.fetchDishes();
-        this.props.fetchPromos();
+        this.props.fetchComments();
         this.props.fetchPromos();
         this.props.fetchLeaders();
     }
