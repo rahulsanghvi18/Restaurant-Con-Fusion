@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, ListItem, Text } from "react-native-elements";
-import { FlatList } from "react-native";
+import { FlatList, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
 import { Loading } from "./LoadingComponent";
@@ -36,14 +36,23 @@ class About extends React.Component {
         return (
             <>
                 {this.history()}
-                <Card title="Corporate Leadership" />
-                {(() => {
-                    if (this.props.leaders.isLoading) {
-                        return <Loading />;
-                    } else {
-                        return <FlatList data={this.props.leaders.leaders} renderItem={renderMenuItem} keyExtractor={(item) => item.id.toString()} />;
-                    }
-                })()}
+                <ScrollView style={{ marginTop: 15 }}>
+                    <Card title="Corporate Leadership">
+                        {(() => {
+                            if (this.props.leaders.isLoading) {
+                                return <Loading />;
+                            } else {
+                                return (
+                                    <FlatList
+                                        data={this.props.leaders.leaders}
+                                        renderItem={renderMenuItem}
+                                        keyExtractor={(item) => item.id.toString()}
+                                    />
+                                );
+                            }
+                        })()}
+                    </Card>
+                </ScrollView>
             </>
         );
     }
