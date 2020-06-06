@@ -16,12 +16,10 @@ const MapStateToProps = (state) => {
 function RenderItem(props) {
     if (props.isLoading) {
         return <Loading />;
-    } else if (props.errMess) {
-        return (
-            <View>
-                <Text>{props.errMess}</Text>
-            </View>
-        );
+    } else if (props.errMess != null) {
+        console.log("here");
+        console.log(props.errMess);
+        return <Text>{props.errMess}</Text>;
     } else {
         const item = props.item;
         if (item != null) {

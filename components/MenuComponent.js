@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { FlatList, Text } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import { Tile } from "react-native-elements";
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
 import { withNavigation } from "react-navigation";
 import Loading from "./LoadingComponent";
+import { postComment } from "../redux/ActionCreators";
 
 const MapStateToProps = (state) => {
     return {
