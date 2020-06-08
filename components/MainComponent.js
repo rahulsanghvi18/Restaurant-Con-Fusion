@@ -4,6 +4,7 @@ import Menu from "./MenuComponent";
 import Dishdetail from "./DishdetailComponent";
 import Contact from "./ContactComponent";
 import About from "./AboutComponent";
+import Favorites from "./FavoriteComponent";
 import { View, Image, StyleSheet, ScrollView, Text } from "react-native";
 import { createStackNavigator, createDrawerNavigator, DrawerItems, SafeAreaView } from "react-navigation";
 import { Icon } from "react-native-elements";
@@ -159,6 +160,32 @@ const ReservationNavigator = createStackNavigator(
     }
 );
 
+const FavoritesNavigator = createStackNavigator(
+    {
+        Favorites: {
+            screen: () => <Favorites />,
+            navigationOptions: ({ navigation }) => {
+                const data = {
+                    title: "My Favourites",
+                    headerLeft: <Icon name="menu" size={26} color="white" onPress={() => navigation.toggleDrawer()} />,
+                };
+                return data;
+            },
+        },
+    },
+    {
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: "#512DA8",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+                color: "#fff",
+            },
+        },
+    }
+);
+
 const CustomDrawerContentComponent = (props) => {
     return (
         <ScrollView>
@@ -226,6 +253,16 @@ const MainNavigator = createDrawerNavigator(
                 drawerLabel: "Reserve Table",
                 drawerIcon: ({ tintColor }) => {
                     return <Icon name="cutlery" type="font-awesome" size={24} color={tintColor} />;
+                },
+            },
+        },
+        Favorites: {
+            screen: FavoritesNavigator,
+            navigationOptions: {
+                title: "My Favorites",
+                drawerLabel: "My Favorites",
+                drawerIcon: ({ tintColor }) => {
+                    return <Icon name="heart" type="font-awesome" size={24} color={tintColor} />;
                 },
             },
         },

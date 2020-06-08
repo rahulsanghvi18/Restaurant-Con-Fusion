@@ -4,6 +4,7 @@ import { FlatList, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
 import { Loading } from "./LoadingComponent";
+import * as Animatable from "react-native-animatable";
 
 const MapStateToProps = (state) => {
     return {
@@ -37,21 +38,23 @@ class About extends React.Component {
             <>
                 {this.history()}
                 <ScrollView style={{ marginTop: 15 }}>
-                    <Card title="Corporate Leadership">
-                        {(() => {
-                            if (this.props.leaders.isLoading) {
-                                return <Loading />;
-                            } else {
-                                return (
-                                    <FlatList
-                                        data={this.props.leaders.leaders}
-                                        renderItem={renderMenuItem}
-                                        keyExtractor={(item) => item.id.toString()}
-                                    />
-                                );
-                            }
-                        })()}
-                    </Card>
+                    <Animatable.View animation="fadeInDown" duration={1000}>
+                        <Card title="Corporate Leadership">
+                            {(() => {
+                                if (this.props.leaders.isLoading) {
+                                    return <Loading />;
+                                } else {
+                                    return (
+                                        <FlatList
+                                            data={this.props.leaders.leaders}
+                                            renderItem={renderMenuItem}
+                                            keyExtractor={(item) => item.id.toString()}
+                                        />
+                                    );
+                                }
+                            })()}
+                        </Card>
+                    </Animatable.View>
                 </ScrollView>
             </>
         );

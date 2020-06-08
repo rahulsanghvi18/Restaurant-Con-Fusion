@@ -6,6 +6,7 @@ import { baseUrl } from "../shared/baseUrl";
 import { withNavigation } from "react-navigation";
 import Loading from "./LoadingComponent";
 import { postComment } from "../redux/ActionCreators";
+import * as Animatable from "react-native-animatable";
 
 const MapStateToProps = (state) => {
     return {
@@ -17,14 +18,16 @@ class Menu extends Component {
     render() {
         const renderMenuItem = ({ item, index }) => {
             return (
-                <Tile
-                    key={index}
-                    title={item.name}
-                    caption={item.description}
-                    featured
-                    onPress={() => this.props.navigation.navigate("Dishdetail", { dishId: item.id })}
-                    imageSrc={{ uri: baseUrl + item.image }}
-                />
+                <Animatable.View animation="fadeInRightBig" duration={1000}>
+                    <Tile
+                        key={index}
+                        title={item.name}
+                        caption={item.description}
+                        featured
+                        onPress={() => this.props.navigation.navigate("Dishdetail", { dishId: item.id })}
+                        imageSrc={{ uri: baseUrl + item.image }}
+                    />
+                </Animatable.View>
             );
         };
 
