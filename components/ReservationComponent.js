@@ -5,6 +5,7 @@ import DatePicker from "react-native-datepicker";
 import * as Animatable from "react-native-animatable";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
+import * as Calendar from "expo-calendar";
 
 class Reservation extends React.Component {
     constructor(props) {
@@ -33,6 +34,7 @@ class Reservation extends React.Component {
                     text: "OK",
                     onPress: () => {
                         this.presentLocalNotification(this.state.date);
+                        this.addReservationToCalendar(this.state.date);
                         this.resetForm();
                     },
                 },
@@ -74,6 +76,43 @@ class Reservation extends React.Component {
                 color: "#512DA8",
             },
         });
+    }
+
+    async obtainCalendarPermission() {
+        let permissions = await Permissions.getAsync(Permissions.CALENDAR);
+        if (permissions.status !== "granted") {
+            permissions = await Permissions.askAsync(Permissions.CALENDAR);
+            if (permissions.status !== "granted") {
+                Alert.alert("Permission not granted to show alert");
+            }
+        }
+        return permissions;
+    }
+
+    async addReservationToCalendar(date) {
+        let permissions = await this.obtainCalendarPermission();
+        console.log(permissions);
+        var StartDate = new Date(date);
+        var EndDate = new Date(date);
+        EndDate.setHours(EndDate.getHours() + 2).toString();
+        EndDate = new Date(EndDate);
+        const { status } = await Calendar.getCalendarPermissionsAsync();
+        if (status === "granted") {
+            const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT)
+                .then((item) => item.filter((el) => el.accessLevel === "owner")[0])
+                .then((item) => {
+                    Calendar.createEventAsync(item.id, {
+                        title: "Con Fusion",
+                        startDate: StartDate,
+                        endDate: EndDate,
+                        location: "121, Clear Water Bay Road, Clear Water Bay, Kowloon, HONG KONG",
+                        timeZone: "GMT-5.5",
+                    })
+                        .then((status) => console.log(status))
+                        .catch((error) => console.error);
+                })
+                .catch((error) => console.log(error));
+        }
     }
 
     render() {
