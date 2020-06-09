@@ -5,12 +5,14 @@ import Dishdetail from "./DishdetailComponent";
 import Contact from "./ContactComponent";
 import About from "./AboutComponent";
 import Favorites from "./FavoriteComponent";
-import { View, Image, StyleSheet, ScrollView, Text } from "react-native";
+import { View, Image, StyleSheet, ScrollView, Text, ToastAndroid } from "react-native";
 import { createStackNavigator, createDrawerNavigator, DrawerItems, SafeAreaView } from "react-navigation";
 import { Icon } from "react-native-elements";
 import { connect } from "react-redux";
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from "../redux/ActionCreators";
 import Reservation from "./ReservationComponent";
+import Login from "./loginComponent";
+import NetInfo from "@react-native-community/netinfo";
 
 const MapStateToProps = (state) => {
     return {
@@ -186,6 +188,32 @@ const FavoritesNavigator = createStackNavigator(
     }
 );
 
+const LoginNavigator = createStackNavigator(
+    {
+        Login: {
+            screen: Login,
+            navigationOptions: ({ navigation }) => {
+                const data = {
+                    title: "Login",
+                    headerLeft: <Icon name="menu" size={26} color="white" onPress={() => navigation.toggleDrawer()} />,
+                };
+                return data;
+            },
+        },
+    },
+    {
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: "#512DA8",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+                color: "#fff",
+            },
+        },
+    }
+);
+
 const CustomDrawerContentComponent = (props) => {
     return (
         <ScrollView>
@@ -206,6 +234,16 @@ const CustomDrawerContentComponent = (props) => {
 
 const MainNavigator = createDrawerNavigator(
     {
+        Login: {
+            screen: LoginNavigator,
+            navigationOptions: {
+                title: "Login",
+                drawerLabel: "Login",
+                drawerIcon: ({ tintColor }) => {
+                    return <Icon name="sign-in" type="font-awesome" size={24} color={tintColor} />;
+                },
+            },
+        },
         Home: {
             screen: HomeNavigator,
             navigationOptions: {
@@ -268,17 +306,45 @@ const MainNavigator = createDrawerNavigator(
         },
     },
     {
+        initialRouteName: "Home",
         drawerBackgroundColor: "#D1C4E9",
         contentComponent: CustomDrawerContentComponent,
     }
 );
 
 class Main extends Component {
+    constructor(props) {
+        super(props);
+        this.eventListener;
+    }
+
     componentDidMount() {
         this.props.fetchDishes();
         this.props.fetchComments();
         this.props.fetchPromos();
         this.props.fetchLeaders();
+        NetInfo.fetch().then((state) => {
+            ToastAndroid.show("Inital Network connectvity type: " + state.type, ToastAndroid.LONG);
+        });
+        this.eventListener = NetInfo.addEventListener(this.handleConnectivityChange);
+    }
+
+    handleConnectivityChange = (connectionInfo) => {
+        switch (connectionInfo.type) {
+            case "none":
+                ToastAndroid.show("You are offline!", ToastAndroid.LONG);
+            case "wifi":
+                ToastAndroid.show("You are connected to wifi!", ToastAndroid.LONG);
+            case "cellular":
+                ToastAndroid.show("You are connected to cellular Network!", ToastAndroid.LONG);
+            case "unknown":
+                ToastAndroid.show("You have a unknown connection!", ToastAndroid.LONG);
+            default:
+        }
+    };
+
+    componentWillUnmount() {
+        this.eventListener();
     }
 
     render() {

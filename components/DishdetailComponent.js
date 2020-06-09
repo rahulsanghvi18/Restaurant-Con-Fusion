@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, ScrollView, FlatList, Modal, Button, Alert, PanResponder } from "react-native";
+import { Text, View, ScrollView, FlatList, Modal, Button, Alert, PanResponder, Share } from "react-native";
 import { Card, Icon, Rating, Input } from "react-native-elements";
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
@@ -28,6 +28,11 @@ function RenderDish(props) {
         else return false;
     };
 
+    const recognizeComment = ({ MoveX, MoveY, dy, dx }) => {
+        if (dx > 200) return true;
+        else return false;
+    };
+
     var view;
     const handleViewRef = (ref) => (view = ref);
 
@@ -36,7 +41,7 @@ function RenderDish(props) {
             return true;
         },
         onPanResponderEnd: (e, gestureState) => {
-            if (reconizeDrag(gestureState))
+            if (reconizeDrag(gestureState)) {
                 Alert.alert(
                     "Add to favorites?",
                     "Are you sure you wish to add" + dish.name + "to your favorites?",
@@ -55,12 +60,28 @@ function RenderDish(props) {
                     ],
                     { cancelable: false }
                 );
+            } else if (recognizeComment(gestureState)) {
+                props.toggleModal();
+            }
             return true;
         },
         onPanResponderGrant: () => {
             view.rubberBand(1000).then((endState) => console.log(endState.finished ? "finished" : "Cancelled"));
         },
     });
+
+    const shareDish = (title, message, url) => {
+        Share.share(
+            {
+                title: title,
+                message: title + ": " + message + " " + url,
+                url: url,
+            },
+            {
+                dialogTitle: "Share " + title,
+            }
+        );
+    };
 
     if (dish != null) {
         return (
@@ -85,6 +106,15 @@ function RenderDish(props) {
                             style={{ flexWrap: "wrap" }}
                             onPress={props.toggleModal}
                         />
+                        <Icon
+                            raised
+                            reverse
+                            name="share"
+                            type="font-awesome"
+                            color="#512DA8"
+                            style={{ flexWrap: "wrap" }}
+                            onPress={() => shareDish(dish.name, dish.description, baseUrl + dish.image)}
+                        />
                     </View>
                 </Card>
             </Animatable.View>
@@ -101,7 +131,7 @@ function RenderComments(props) {
             <View key={index} style={{ margin: 10 }}>
                 <Text style={{ fontSize: 14 }}>{item.comment}</Text>
                 <View style={{ alignSelf: "flex-start" }}>
-                    <Rating startingValue={item.rating} ratingCount={5} imageSize={16} />
+                    <Rating readonly startingValue={item.rating} ratingCount={5} imageSize={16} />
                 </View>
                 <Text style={{ fontSize: 12 }}>{"--" + item.author + ", " + item.date}</Text>
             </View>
