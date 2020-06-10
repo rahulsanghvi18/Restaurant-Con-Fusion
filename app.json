@@ -1,17 +1,21 @@
 {
-  "name": "confusion",
-  "displayName": "confusion",
-  "expo": {
     "name": "confusion",
-    "slug": "expo-template-bare",
-    "version": "1.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "assetBundlePatterns": [
-      "**/*"
-    ]
-  }
+    "displayName": "confusion",
+    "expo": {
+        "privacy": "public",
+        "sdkVersion": "37.0.0",
+        "name": "confusion",
+        "icon": "./icon.png",
+        "slug": "confusion",
+        "version": "1.0.0",
+        "android": {
+            "package": "net.food.confusion.confusion"
+        },
+        "platforms": ["ios", "android", "web"],
+        "assetBundlePatterns": ["**/*"],
+        "ios": {
+            "bundleIdentifier": "confusion"
+        },
+        "entryPoint": "node_modules/expo/AppEntry.js"
+    }
 }
